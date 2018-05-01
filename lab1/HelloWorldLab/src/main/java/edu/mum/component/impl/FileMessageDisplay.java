@@ -12,7 +12,7 @@ import edu.mum.component.MessageDisplay;
 import edu.mum.component.MessageOrigin;
 
 @Component
-public class FileMessageDisplay implements MessageDisplay  {
+public class FileMessageDisplay implements MessageDisplay {
 
     @Autowired
     private MessageOrigin messageOrigin;
@@ -38,7 +38,7 @@ public class FileMessageDisplay implements MessageDisplay  {
         String path = this.getClass().getClassLoader().getResource(".").getFile();
 
         //create file
-        File file = new File(fileName);
+        File file = new File(path + fileName);
         try {
             if (file.createNewFile()) {
                 System.out.println("File is created!");
