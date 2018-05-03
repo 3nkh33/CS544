@@ -47,7 +47,6 @@ http://www.springframework.org/schema/data/jpa ">
 
     <!-- Scan for  transaction-based resources -->
     <context:component-scan base-package="edu.mum"/>
-    <bean id="userServiceImpl" class="edu.mum.service.impl.UserServiceImpl"/>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 

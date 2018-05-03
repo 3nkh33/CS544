@@ -10,88 +10,102 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-  public class User implements Serializable  {
+import org.hibernate.annotations.GenericGenerator;
 
+@Entity(name = "User")
+public class User implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
+    @Column(name = "ID")
     private Long id = null;
 
-     private String firstName;
+    @Column(name="FNAME", length = 16)
+    private String firstName;
 
-     private String lastName;
+    @Column(name="LNAME", length = 16)
+    private String lastName;
 
-     private String email;
+    @Column(name="EMAIL", length = 16)
+    private String email;
 
-     private int ranking = 0;
+    private int ranking = 0;
 
-     private boolean admin = false;
-     
-     @Version
-     private int version = 0;
+    private boolean admin = false;
 
-     private Date lastLogin;
-     
-	public Long getId() {
-		return id;
-	}
+    @Version
+    private int version = 0;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Temporal(TemporalType.DATE)
+    @Column
+    private Date lastLogin;
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setFirstName(String firstname) {
-		this.firstName = firstname;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setLastName(String lastname) {
-		this.lastName = lastname;
-	}
+    public void setFirstName(String firstname) {
+        this.firstName = firstname;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setLastName(String lastname) {
+        this.lastName = lastname;
+    }
 
-	public int getRanking() {
-		return ranking;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setRanking(int ranking) {
-		this.ranking = ranking;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public boolean isAdmin() {
-		return admin;
-	}
+    public int getRanking() {
+        return ranking;
+    }
 
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
-	}
+    public void setRanking(int ranking) {
+        this.ranking = ranking;
+    }
 
-	public int getVersion() {
-		return version;
-	}
+    public boolean isAdmin() {
+        return admin;
+    }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
 
-	public Date getLastLogin() {
-		return lastLogin;
-	}
+    public int getVersion() {
+        return version;
+    }
 
-	public void setLastLogin(Date lastLogin) {
-		this.lastLogin = lastLogin;
-	}
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
 
 }
