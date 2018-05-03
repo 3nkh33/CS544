@@ -16,16 +16,16 @@ public class Main {
         UserService userDao = (UserService) context.getBean("userServiceImpl");
 
         User user = new User();
-        userDao.insert(user);
+        user.setFirstName("aaa");
+        user.setLastName("bbbb");
+        user.setEmail("ccc");
+        userDao.save(user);
 
-        vehicle = vehicleDao.findByVehicleNo("TEM0001");
+        user = userDao.findByEmail("ccc");
 
         System.out.println();
-        System.out.println("        *********  VEHICLE **********");
-        System.out.println("Vehicle No: " + vehicle.getVehicleNo());
-        System.out.println("Color: " + vehicle.getColor());
-        System.out.println("Wheel: " + vehicle.getWheel());
-        System.out.println("Seat: " + vehicle.getSeat());
+        System.out.println("        *********  User **********");
+        System.out.println("User Name: " + user.getFirstName() + " " + user.getLastName());
 
     }
 
