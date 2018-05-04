@@ -11,16 +11,14 @@ import javax.persistence.*;
  * @see CreditCardType
  * @author Christian Bauer
  */
-@Entity
-
-public class CreditCard extends BillingDetails {
-	// Id Shared with Superclass - BillngDetails
+@Entity(name="CREDIT_CARD")
+ public class CreditCard extends BillingDetails {
 
  
     @Column( name = "CC_NUMBER", nullable = false, updatable = false, length = 16)
     private String number;
 
-    @Column( name = "CC_EXP_MONTH", nullable = false, updatable = false, length = 2)
+    @Column(name = "CC_EXP_MONTH", nullable = false, updatable = false, length = 2)
     private String expMonth="";
 
     @Column( name = "CC_EXP_YEAR", nullable = false, updatable = false, length = 4)

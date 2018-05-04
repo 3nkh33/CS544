@@ -1,5 +1,6 @@
 package edu.mum.domain;
 
+ 
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,16 +12,14 @@ import java.util.*;
  *
  * @author Christian Bauer
  */
-
+ 
 
 @Entity
 @Table(name = "ITEM")
-public class Item implements Serializable {
+ public class Item   {
 
-    private static final String COLLECTION_ID_GENERATOR = "identity";
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+     @Id 
+ 	@GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ITEM_ID")
     private Long id = null;
 
@@ -32,7 +31,7 @@ public class Item implements Serializable {
     private String name;
 
 
-    private User seller;
+     private User seller;
 
 
     private User buyer;
@@ -40,133 +39,82 @@ public class Item implements Serializable {
     @Column(name = "DESCRIPTION", length = 4000, nullable = false)
     private String description;
 
-    private BigDecimal initialPrice;
+     private BigDecimal initialPrice;
 
-    private BigDecimal reservePrice;
+     private BigDecimal reservePrice;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade= {CascadeType.PERSIST,CascadeType.MERGE}, mappedBy="items")
-    private Set<Category> categories = new HashSet<Category>();
+     @ManyToMany(fetch=FetchType.EAGER, cascade= {CascadeType.PERSIST,CascadeType.MERGE })
+     private Set<Category> categories = new HashSet<Category>();
 
     @Transient
-    private User approvedBy;
+	private User approvedBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "APPROVAL_DATETIME", nullable = true)
     private Date approvalDatetime;
-
-    @Transient
-    private Collection<String> images = new ArrayList<String>();
+ 
+@Transient
+       private Collection<String> images = new ArrayList<String>();
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED", nullable = false, updatable = false)
+    @Column(name="CREATED", nullable = true, updatable = false)
     private Date created = new Date();
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "START_DATE", nullable = false, updatable = false)
+    @Column(name = "START_DATE", nullable = true, updatable = false)
     private Date startDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "END_DATE", nullable = false, updatable = false)
-    @org.hibernate.annotations.Index(name = "IDX_END_DATE")
+    @Column(name = "END_DATE", nullable = true, updatable = false)
     private Date endDate;
 
 
-    /**
-     * No-arg constructor for JavaBean tools.
-     */
-    public Item() {
-    }
-
-
+ 
     // ********************** Accessor Methods ********************** //
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public int getVersion() { return version; }
 
-    public int getVersion() {
-        return version;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
-    }
+    public User getSeller() { return seller; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public User getBuyer() { return buyer; }
+    public void setBuyer(User buyer) { this.buyer = buyer; }
 
-    public User getSeller() {
-        return seller;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public User getBuyer() {
-        return buyer;
-    }
+    public BigDecimal getInitialPrice() { return initialPrice; }
+    public void  setInitialPrice(BigDecimal initialPrice) { this.initialPrice =  initialPrice; }
 
-    public void setBuyer(User buyer) {
-        this.buyer = buyer;
-    }
+    public BigDecimal getReservePrice() { return reservePrice; }
 
-    public String getDescription() {
-        return description;
-    }
+    public void setReservePrice(BigDecimal reservePrice) { this.reservePrice =  reservePrice; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public Date getStartDate() { return startDate; }
 
-    public BigDecimal getInitialPrice() {
-        return initialPrice;
-    }
+    public Date getEndDate() { return endDate; }
 
-    public void setInitialPrice(BigDecimal price) {
-        this.initialPrice = price;
-    }
+	public void addCategory(Category category) {
+		this.categories.add(category);
+		category.getItems().add(this);
+	}
 
-    public BigDecimal getReservePrice() {
-        return reservePrice;
-    }
+    public User getApprovedBy() { return approvedBy; }
+    public void setApprovedBy(User approvedBy) { this.approvedBy = approvedBy; }
 
-    public Date getStartDate() {
-        return startDate;
-    }
+    public Date getApprovalDatetime() { return approvalDatetime; }
+    public void setApprovalDatetime(Date approvalDatetime) { this.approvalDatetime = approvalDatetime; }
 
-    public Date getEndDate() {
-        return endDate;
-    }
-
-
-    public User getApprovedBy() {
-        return approvedBy;
-    }
-
-    public void setApprovedBy(User approvedBy) {
-        this.approvedBy = approvedBy;
-    }
-
-    public Date getApprovalDatetime() {
-        return approvalDatetime;
-    }
-
-    public void setApprovalDatetime(Date approvalDatetime) {
-        this.approvalDatetime = approvalDatetime;
-    }
-
-
+ 
     // Read-only, modify through Category#addItem() and Category@removeItem();
-    public Set<Category> getCategories() {
-        return Collections.unmodifiableSet(categories);
-    }
+    public Set<Category> getCategories() { return Collections.unmodifiableSet(categories); }
 
+    public Collection<String> getImages() { return images; }
 
-    public Collection<String> getImages() {
-        return images;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
+    public Date getCreated() { return created; }
 
     // ********************** Common Methods ********************** //
 
@@ -176,7 +124,7 @@ public class Item implements Serializable {
 
         final Item item = (Item) o;
 
-        if (!(created.getTime() == item.created.getTime())) return false;
+        if (! (created.getTime() == item.created.getTime()) ) return false;
         if (name != null ? !name.equals(item.name) : item.name != null) return false;
 
         return true;
@@ -190,24 +138,22 @@ public class Item implements Serializable {
     }
 
     public String toString() {
-        return "Item ('" + getId() + "'), " +
+        return  "Item ('" + getId() + "'), " +
                 "Name: '" + getName() + "' " +
-                "Initial Price: '" + getInitialPrice() + "'";
+                "Initial Price: '" + getInitialPrice()+ "'";
     }
 
     public int compareTo(Object o) {
         if (o instanceof Item) {
             // Don't compare Date objects! Use the time in milliseconds!
             return Long.valueOf(this.getCreated().getTime()).compareTo(
-                    Long.valueOf(((Item) o).getCreated().getTime())
-            );
+                    Long.valueOf( ((Item)o).getCreated().getTime())
+                   );
         }
         return 0;
     }
 
     // ********************** Business Methods ********************** //
-    public void addCategory(Category category) {
-        categories.add(category);
-    }
 
+  
 }

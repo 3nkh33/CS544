@@ -5,7 +5,8 @@ import java.io.Serializable;
 import java.util.*;
 
  @Entity
-@Table(name = "CATEGORY")
+@Table(
+   name = "CATEGORY")
 public class Category implements Serializable {
 
 	@Id
@@ -20,10 +21,8 @@ public class Category implements Serializable {
     @Column(name = "CATEGORY_NAME", length = 255, nullable = false)
     private String name;
 
-     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-     @JoinTable ( name="Category_Item", joinColumns={@JoinColumn(name="Category_ID")},
-             inverseJoinColumns={ @JoinColumn(name="ITEM_ID")} )
-     private List<Item> items = new ArrayList<Item>();
+    @ManyToMany(mappedBy="categories",fetch=FetchType.EAGER, cascade= {CascadeType.PERSIST,CascadeType.MERGE })
+    private List<Item> items = new ArrayList<Item>();
 
     
     @Transient

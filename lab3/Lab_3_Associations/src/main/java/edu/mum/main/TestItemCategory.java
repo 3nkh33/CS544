@@ -75,7 +75,6 @@ public class TestItemCategory {
 	
 		}
 		
-		
  		category =  categoryService.findByCategoryName(category.getName());
  
 		System.out.println("--------Category-> Items--------------");

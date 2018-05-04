@@ -12,6 +12,8 @@ import javax.persistence.Column;
 @Entity
 public class BankAccount extends BillingDetails {
 
+	// Id Shared with Superclass - BillngDetails
+	
     @Column(name = "BA_ACCOUNT", nullable = true, length = 16)
     private String account;
 

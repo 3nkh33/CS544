@@ -1,10 +1,23 @@
-package edu.mum.domain;
+		package edu.mum.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "USERS")
@@ -28,18 +41,19 @@ import javax.persistence.*;
     private String email;
 
     @Column(name = "RANK", nullable = false)
-    private Integer ranking = 0;
+    private int ranking = 0;
 
     @Column(name = "IS_ADMIN", nullable = false)
-    private Boolean admin = false;
+    private boolean admin = false;
 
-	@OneToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST,CascadeType.REMOVE})
-	@JoinColumn(name="user_id")
+	@OneToOne(fetch=FetchType.EAGER,  cascade = CascadeType.ALL) 
+	@JoinColumn(name="userId") 
 	private UserCredentials userCredentials;
 
-	@OneToMany(mappedBy="Users")
-    private Set<Address> addresses = new HashSet<Address>();
+	   @OneToMany(fetch=FetchType.EAGER, cascade = {CascadeType.PERSIST,CascadeType.MERGE}, mappedBy="user")
+	     private Set<Address> addresses = new HashSet<Address>();
 
+	 
 	public Long getId() {
 		return id;
 	}
@@ -88,22 +102,6 @@ import javax.persistence.*;
 		this.admin = admin;
 	}
 
-	public int getVersion() {
-		return version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
-	}
-
-	public Boolean getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(Boolean admin) {
-		this.admin = admin;
-	}
-
 	public UserCredentials getUserCredentials() {
 		return userCredentials;
 	}
@@ -120,12 +118,9 @@ import javax.persistence.*;
 		this.addresses = addresses;
 	}
 
-	public void setRanking(Integer ranking) {
-		this.ranking = ranking;
-	}
-
-	public void addAddress(Address address){
-		addresses.add(address);
+	public void addAddress(Address address) {
+		this.addresses.add(address);
+		address.setUser(this);
 	}
 
 }

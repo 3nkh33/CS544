@@ -1,8 +1,15 @@
 package edu.mum.domain;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import java.io.Serializable;
-
-import javax.persistence.*;
 
 /**
  * The address of a User.
@@ -20,28 +27,20 @@ public class Address implements Serializable {
 
     @Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
-     private Long id = null;
+   private Long id = null;
 
-	@Column(length = 255, nullable = true)
+
+    @Column(length = 255, nullable = false)
 	private String street="";
 
-    @Column(length = 16, nullable = true)
+    @Column(length = 16, nullable = false)
 	private String zipcode="";
 
-    @Column(length = 255, nullable = true)
+    @Column(length = 255, nullable = false)
 	private String city="";
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn (name="user_id")
-	private User user;
+  	@ManyToOne(fetch=FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  	private User  user;
 
 	/**
 	 * No-arg constructor for JavaBean tools
@@ -58,14 +57,6 @@ public class Address implements Serializable {
 	}
 
 	// ********************** Accessor Methods ********************** //
-    public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 
 	public String getStreet() { return street; }
 	public void setStreet(String street) { this.street = street; }
@@ -103,6 +94,27 @@ public class Address implements Serializable {
 		return  "Street: '" + getStreet() + "', " +
 				"Zipcode: '" + getZipcode() + "', " +
 				"City: '" + getCity() + "'";
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void addUser(User user) {
+		this.user = user;
+		this.user.getAddresses().add(this);
 	}
 
 	// ********************** Business Methods ********************** //

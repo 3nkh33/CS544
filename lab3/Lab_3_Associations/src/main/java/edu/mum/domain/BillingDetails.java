@@ -16,8 +16,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "BILLING_DETAILS")
-
-
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class BillingDetails implements Serializable, Comparable {
 
 	@Id
@@ -34,11 +33,10 @@ public abstract class BillingDetails implements Serializable, Comparable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", updatable = false)
-    @org.hibernate.annotations.ForeignKey(name = "FK_USER_ID")
-    private User user;
+     private User user;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="CREATED", nullable = false, updatable = false)
+    @Column(name="CREATED", nullable = true, updatable = false)
 	private Date created = new Date();
 
 	/**
