@@ -45,18 +45,25 @@ public class ItemDaoImpl extends GenericDaoImpl<Item> implements ItemDao {
         String or = "";
 
         // TODO Seller Test
-        if (seller != null) sellerPrice = "( i.initialPrice=:price and i.seller=:seller )";
+        if (seller != null) sellerPrice = "( i.initialPrice=:price and i.itemSellerId=:seller)";
         // TODO Buyer test
         if (buyer != null)
-            buyerPrice = "( i.item_id from u.boughtItems where u.user_id=:buyer) )";
+            buyerPrice = "( i.item_id in (select item_id from u.boughtItems where u.id=:buyer) )";
         if (buyer != null && seller != null) or = "OR";
 
         Query query = entityManager.createQuery("select distinct i from Item i, User u where "
                 + sellerPrice + or + buyerPrice);
 
         //	TODO Set parameters here....
-        query.setParameter("price", price);
-        query.setParameter("seller", seller);
+        if (seller != null) {
+            query.setParameter("price", price);
+            query.setParameter("seller", seller.getId());
+        }
+
+        if (buyer != null) {
+            query.setParameter("buyer", buyer.getId());
+        }
+
 
         return (List<Item>) query.getResultList();
     }

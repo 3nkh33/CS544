@@ -30,13 +30,13 @@ public class TestFindItemsBySellOrBuy{
 	    
 	    // Test JPQL query
 //	    List<Item> items = itemService.findBySellerOrBuyer(22, buyer,null);	     // Shoes
-	    List<Item> items = itemService.findBySellerOrBuyer(22, null,seller);	 //Sled
+	    //List<Item> items = itemService.findBySellerOrBuyer(22, null,seller);	 //Sled
 //	    List<Item> items = itemService.findBySellerOrBuyer(22, buyer,seller);	 // Sled & Shoes
 
 	    // Test Criteria query
 	    //List<Item> items = itemService.findItemCriteria(22,buyer,null);    // Shoes
 	    //List<Item> items = itemService.findItemCriteria(22,null,seller);   //Sled
-	    //List<Item> items = itemService.findItemCriteria(22,buyer,seller);  // Sled & Shoes
+	    List<Item> items = itemService.findItemCriteria(22,buyer,seller);  // Sled & Shoes
 
 
 	 	   System.out.println();
