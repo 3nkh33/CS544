@@ -48,6 +48,11 @@ public class Groups {
 		authority.setAuthority("UPDATE");
 		groupSuper.getAuthority().add(authority);
 
+		//Add CREATE to Admin only
+		authority = new Authority();
+		authority.setAuthority("CREATE");
+		groupAdmin.getAuthority().add(authority);
+
  	   // Add users to groups
 		UserCredentials userCredentials = userCredentialsService.findByUserName("Sean");
 		groupAdmin.getUserCredentials().add(userCredentials);
