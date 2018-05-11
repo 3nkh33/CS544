@@ -35,33 +35,34 @@ public class HelloWorld {
         l2.next.next.next.next.next.next.next.next = new ListNode(9);
         l2.next.next.next.next.next.next.next.next.next = new ListNode(9);
 
-        ListNode res = addTwoNumbers(l1, l2);
-        tmpNode = res;
-        System.out.println(tmpNode.val);
-        while (tmpNode.next != null) {
-            tmpNode = tmpNode.next;
-            System.out.println(tmpNode.val);
-        }
+//        ListNode res = addTwoNumbers(l1, l2);
+//        tmpNode = res;
+//        System.out.println(tmpNode.val);
+//        while (tmpNode.next != null) {
+//            tmpNode = tmpNode.next;
+//            System.out.println(tmpNode.val);
+//        }
+        System.out.println(longestPalindrome("cbbd"));
 
     }
 
     public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         int resultValue = l1.val + l2.val;
         int extra = 0;
-        if(resultValue > 9){
-            resultValue = resultValue%10;
+        if (resultValue > 9) {
+            resultValue = resultValue % 10;
             extra = 1;
         }
         ListNode result = new ListNode(resultValue);
-        ListNode tmpNode= result;
-        while (l1.next != null && l2.next !=null) {
+        ListNode tmpNode = result;
+        while (l1.next != null && l2.next != null) {
             l1 = l1.next;
-            l2=l2.next;
+            l2 = l2.next;
             resultValue = l1.val + l2.val + extra;
-            if(resultValue > 9){
-                resultValue = resultValue%10;
+            if (resultValue > 9) {
+                resultValue = resultValue % 10;
                 extra = 1;
-            }else
+            } else
                 extra = 0;
             tmpNode.next = new ListNode(resultValue);
             tmpNode = tmpNode.next;
@@ -69,60 +70,56 @@ public class HelloWorld {
         while (l1.next != null) {
             l1 = l1.next;
             resultValue = l1.val + extra;
-            if(resultValue > 9){
-                resultValue = resultValue%10;
+            if (resultValue > 9) {
+                resultValue = resultValue % 10;
                 extra = 1;
-            }else
-                extra=0;
+            } else
+                extra = 0;
             tmpNode.next = new ListNode(resultValue);
             tmpNode = tmpNode.next;
         }
         while (l2.next != null) {
             l2 = l2.next;
             resultValue = l2.val + extra;
-            if(resultValue > 9){
-                resultValue = resultValue%10;
+            if (resultValue > 9) {
+                resultValue = resultValue % 10;
                 extra = 1;
-            }else
-                extra=0;
+            } else
+                extra = 0;
             tmpNode.next = new ListNode(resultValue);
             tmpNode = tmpNode.next;
         }
-        if(extra > 0)
+        if (extra > 0)
             tmpNode.next = new ListNode(extra);
 
         return result;
     }
 
-    public static ListNode addTwoNumbers1(ListNode l1, ListNode l2) {
-        long number1 = 0, number2 = 0, tmpIndex = 1;
-        ListNode tmpNode = l1;
-        number1 = tmpIndex * tmpNode.val + number1;
-        while (tmpNode.next != null) {
-            tmpIndex = tmpIndex * 10;
-            tmpNode = tmpNode.next;
-            number1 = tmpIndex * tmpNode.val + number1;
+    public static String longestPalindrome(String s) {
+        String max = "";
+        String tmp ="";
+        for(int i=0; i<s.length(); i++){
+            tmp = s.substring(0,i);
+            if(idPalindromic(tmp)){
+                if(tmp.length()>max.length())
+                    max=tmp;
+            }
+
         }
-        tmpNode = l2;
-        tmpIndex = 1;
-        number2 = tmpIndex * tmpNode.val + number2;
-        while (tmpNode.next != null) {
-            tmpIndex = tmpIndex * 10;
-            tmpNode = tmpNode.next;
-            number2 = tmpIndex * tmpNode.val + number2;
-        }
-        long total = number1 + number2;
-        long first = total % 10;
-        ListNode resNode = new ListNode((int) first);
-        total = total / 10;
-        tmpNode = resNode;
-        while (total > 0) {
-            ListNode tmp = new ListNode((int) total % 10);
-            tmpNode.next = tmp;
-            total = total / 10;
-            tmpNode = tmp;
-        }
-        return resNode;
+        return max;
+    }
+
+    private static boolean idPalindromic(String s) {
+        int startSecond = s.length() / 2;
+        if (s.length() % 2 != 0)
+            startSecond++;
+        String first = s.substring(0, s.length() / 2);
+        StringBuffer second = new StringBuffer(s.substring(startSecond, s.length()));
+
+        if (first.equals(second.reverse().toString()))
+            return true;
+        else return false;
+
     }
 }
 
