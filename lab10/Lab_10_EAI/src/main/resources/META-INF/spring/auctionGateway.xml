@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/integration"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:amqp="http://www.springframework.org/schema/integration/amqp"
+             xmlns:jms="http://www.springframework.org/schema/integration/jms"
+             xmlns:mail="http://www.springframework.org/schema/integration/mail"
+             xmlns:stream="http://www.springframework.org/schema/integration/stream"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context.xsd
+			http://www.springframework.org/schema/integration
+			http://www.springframework.org/schema/integration/spring-integration.xsd
+ 			http://www.springframework.org/schema/integration/mail
+    		http://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd
+ 			http://www.springframework.org/schema/integration/amqp 
+ 			http://www.springframework.org/schema/integration/amqp/spring-integration-amqp.xsd
+    		http://www.springframework.org/schema/integration/jms
+			http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
+			http://www.springframework.org/schema/integration/stream
+			http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
+
+
+    <amqp:inbound-channel-adapter channel="inboundChannel" queue-names="itemQueue"
+                                  id="inboundAdapter" connection-factory="amqpConnectionFactory"/>
+    <channel id="inboundChannel"/>
+    <transformer output-channel="outboundChannel"
+                 input-channel="inboundChannel" id="itemToAuction"
+                 ref="itemTransformer">
+    </transformer>
+    <channel id="outboundChannel"></channel>
+    <router input-channel="outboundChannel" ref="itemRouter" method="createAuction"/>
+
+    <jms:channel id="priceChannel1" queue-name="priceChannel1"></jms:channel>
+    <jms:outbound-channel-adapter id="outboundAdapter1" channel="priceChannel1"
+                                  destination="highAuctionQueue"></jms:outbound-channel-adapter>
+
+    <jms:channel id="priceChannel2" queue-name="priceChannel2"></jms:channel>
+    <jms:outbound-channel-adapter id="outboundAdapter2" channel="priceChannel2"
+                                  destination="moderateAuctionQueue"></jms:outbound-channel-adapter>
+
+    <beans:bean id="itemTransformer" class="edu.mum.integration.ItemTransformerImpl"/>
+    <beans:bean id="itemRouter" class="edu.mum.integration.ItemRouter"/>
+</beans:beans>

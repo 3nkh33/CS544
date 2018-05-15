@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/rabbit
+        http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
+
+
+	<rabbit:connection-factory id="amqpConnectionFactory"
+		host="localhost" username="joe" password="joe" />
+	<!-- <rabbit:admin connection-factory="amqpConnectionFactory" /> -->
+
+
+
+	<rabbit:queue name="itemQueue" durable="true" />
+
+	<rabbit:direct-exchange name="direct" durable="true">
+		<rabbit:bindings>
+			<rabbit:binding queue="itemQueue" key="item.info"></rabbit:binding>
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+
+
+	<rabbit:template id="itemTemplate" connection-factory="amqpConnectionFactory"
+		reply-timeout="2000" routing-key="item.info" exchange="direct" />
+
+	<!-- LISTENERS -->
+
+	<rabbit:listener-container
+		connection-factory="amqpConnectionFactory">
+		<rabbit:listener ref="queueListener" method="onMessage"
+			queue-names="itemQueue" />
+	</rabbit:listener-container>
+
+	<bean id="queueListener" class="edu.mum.listener.HighPriceListener" />
+</beans>

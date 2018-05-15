@@ -7,23 +7,25 @@
         http://www.springframework.org/schema/rabbit
         http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
 
-   
-<!-- *********** DIRECT EXCHANGE ***************** -->
-    <!-- <rabbit:queue name="itemQueue" durable="true" />
+    <rabbit:connection-factory id="connectionFactory" host="localhost" username="joe" password="joe"/>
 
-	<rabbit:direct-exchange name="direct" durable="true">
-		<rabbit:bindings>
-			<rabbit:binding queue="itemQueue" key="purchases.item"></rabbit:binding>
-		</rabbit:bindings>
-	</rabbit:direct-exchange> -->
+    <rabbit:admin connection-factory="connectionFactory"/>
+    <!-- *********** DIRECT EXCHANGE ***************** -->
+    <rabbit:queue name="itemQueue" durable="true"/>
 
-<!--  ****************  DIRECT CONSUMER ************************* -->
+    <rabbit:direct-exchange name="direct" durable="true">
+        <rabbit:bindings>
+            <rabbit:binding queue="itemQueue" key="purchases.item"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+    <!--  ****************  DIRECT CONSUMER ************************* -->
     <rabbit:listener-container
             connection-factory="connectionFactory">
         <rabbit:listener ref="queueListener" method="listen"
-                         queue-names="itemQueue" />
+                         queue-names="itemQueue"/>
     </rabbit:listener-container>
 
-    <bean id="queueListener" class="edu.mum.amqp.ItemListener" />
- 
+    <bean id="queueListener" class="edu.mum.amqp.ItemListener"/>
+
 </beans>
