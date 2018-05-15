@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/jms
+        http://www.springframework.org/schema/jms/spring-jms.xsd">
+        
+    
+        
+    <!-- TCP: means remote access on connection vm: means Local -->
+<!-- ActiveMQ's default port is 61616 -->
+ <!-- TCP: means remote access on connection VM: means Local -->
+ <!-- p:trustAllPackages indicates that ALL serialized object will be allowed
+      in PRODUCTION specific packages would be called out p:trustedPackages=".." -->
+    <bean id="connectionFactory"
+          class="org.apache.activemq.ActiveMQConnectionFactory"
+           p:brokerURL="tcp://localhost:61615" />
+<!-- http://activemq.apache.org/spring-support.html for embedded broker  
+  http://activemq.apache.org/how-do-i-embed-a-broker-inside-a-connection.html-->
+<!--http://www.roytuts.com/embedded-activemq-and-spring-jms-integration/ -->
+
+<!-- # of concurrent sessions -->
+ <bean id="cachedConnectionFactory"
+    class="org.springframework.jms.connection.CachingConnectionFactory"
+    p:targetConnectionFactory-ref="connectionFactory"
+    p:sessionCacheSize="10" />
+
+    <bean id="highPriceListener" class="edu.mum.listener.HighPriceListener"/>
+	<bean id="moderatePriceListener" class="edu.mum.listener.ModeratePriceListener"/>
+
+    <jms:listener-container container-type="default"
+                            connection-factory="cachedConnectionFactory" acknowledge="auto">
+        <jms:listener destination="auction.high" ref="highPriceListener" method="onMessage" />
+    </jms:listener-container>
+    <jms:listener-container container-type="default"
+                            connection-factory="cachedConnectionFactory" acknowledge="auto">
+        <jms:listener destination="auction.moderate" ref="moderatePriceListener" method="onMessage" />
+    </jms:listener-container>
+    
+    <bean id="highAuctionQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="auction.high"/>
+	</bean>
+	
+	<bean id="moderateAuctionQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="auction.moderate"/>
+	</bean>
+    
+</beans>
